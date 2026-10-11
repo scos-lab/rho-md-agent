@@ -7,7 +7,8 @@ export to PDF or Word.
 
 ## Requirements
 
-- Rho MD 1.4.15 or later, installed and running on the same computer ([download](https://rho.md/download)).
+- Rho MD 1.4.15 or later, installed and running on the same computer ([download](https://download.rho.md/gh)).
+  Rho MD 1.4.15 is available for Windows and Linux; the Mac version follows.
 - Settings › AI tools › "Allow AI tools to use Rho MD" switched on (the default).
 
 The plugin does not work in cloud sandboxes, where the app is not available.
@@ -57,7 +58,7 @@ plugins/rho-md/
 
 ## Support
 
-hello@rho.md
+support@rho.md
 
 ## License
 

@@ -32,7 +32,7 @@ Run `--status` once.
 
 - Exit `2`, "not running": run `--launch` once (it starts Rho MD and waits), then retry. If that
   fails too, tell the user once that Rho MD needs to be running with Settings › AI tools switched on,
-  and that it can be downloaded from https://rho.md/download. Do not retry in a loop.
+  and give them the download link from the script's message. Do not retry in a loop.
 - Exit `2` with a message about a sandbox or `EPERM`: your command sandbox blocks the local network.
   Ask the user to approve running this command with network access, then retry.
 - Exit `3`: the user has not allowed this tool. Tell them they can allow it in Rho MD under

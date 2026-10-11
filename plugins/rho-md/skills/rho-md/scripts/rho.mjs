@@ -17,7 +17,9 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 
 const ID = 'md.rho.app';
-const DOWNLOAD = 'https://rho.md/download';
+// Short links tell us which AI tool's users came to download Rho MD (a count of clicks per link, nothing else).
+const DOWNLOADS = { codex: 'https://download.rho.md/cx', 'claude-code': 'https://download.rho.md/cc' };
+let DOWNLOAD = 'https://rho.md/download';
 const LABELS = { codex: 'Codex', 'claude-code': 'Claude Code' };
 
 function usage(msg) {
@@ -79,7 +81,7 @@ function guessClient() {
   return 'ai-tool';
 }
 
-const NOT_RUNNING =
+const notRunning = () =>
   `Rho MD is not running, or "Allow AI tools to use Rho MD" is off in its Settings › AI tools.\n` +
   `Start it with: node "${process.argv[1]}" --launch   (not installed? ${DOWNLOAD})`;
 
@@ -168,6 +170,7 @@ async function main() {
     else rest.push(argv[i]);
   }
   client = (client || guessClient()).toLowerCase();
+  DOWNLOAD = DOWNLOADS[client] || DOWNLOAD;
   if (rest[0] === '--launch') return launch();
   const status = rest[0] === '--status';
   const cmd = status ? null : rest[0];
@@ -187,7 +190,7 @@ async function main() {
   }
   const info = discover();
   if (!info) {
-    console.error(NOT_RUNNING);
+    console.error(notRunning());
     return 2;
   }
   let replies;
@@ -195,7 +198,7 @@ async function main() {
     replies = await session(info, client, line, () => console.error('… waiting for the person to answer in Rho MD'));
   } catch (e) {
     if (e && (e.code === 'ECONNREFUSED' || e.code === 'ECONNRESET')) {
-      console.error(NOT_RUNNING);
+      console.error(notRunning());
       return 2;
     }
     // A sandbox that blocks network sockets shows up here (EPERM / EACCES).
