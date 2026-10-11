@@ -1,0 +1,20 @@
+{
+  "name": "rho-md",
+  "interface": {
+    "displayName": "Rho MD"
+  },
+  "plugins": [
+    {
+      "name": "rho-md",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rho-md"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

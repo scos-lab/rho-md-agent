@@ -1,0 +1,21 @@
+{
+  "name": "rho-md",
+  "version": "0.1.0",
+  "description": "Use the Rho MD app on your computer from your AI tool: open Markdown documents to read them rendered, read and edit the open document, and search and organize your notes library.",
+  "author": {
+    "name": "Rho MD",
+    "email": "hello@rho.md",
+    "url": "https://rho.md"
+  },
+  "homepage": "https://rho.md",
+  "license": "MIT",
+  "keywords": [
+    "markdown",
+    "notes",
+    "reader",
+    "notebook",
+    "knowledge base",
+    "documents",
+    "rho md"
+  ]
+}
