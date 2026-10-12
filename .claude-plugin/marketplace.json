@@ -9,8 +9,8 @@
     {
       "name": "rho-md",
       "source": "./plugins/rho-md",
-      "description": "Use the Rho MD app on your computer from your AI tool: open Markdown documents to read them rendered, read and edit the open document, and search and organize your notes library.",
-      "version": "0.1.0",
+      "description": "Search and read the documents people publish on Rho Cloud (rho.md), with links to the sources; and use the Rho MD app on your computer to open Markdown documents rendered, read and edit the open document, and search and organize your notes library.",
+      "version": "0.2.0",
       "category": "productivity"
     }
   ]
