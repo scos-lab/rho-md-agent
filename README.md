@@ -54,6 +54,7 @@ plugins/rho-md/
   skills/rho-md/SKILL.md             the skill
   skills/rho-md/scripts/             rho.mjs · rho.sh · rho.ps1
   skills/rho-md/references/          command reference
+tools/pack_openai.py                 builds and checks the ZIP for the OpenAI plugin directory
 ```
 
 ## Support
