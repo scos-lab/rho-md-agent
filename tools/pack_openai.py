@@ -5,7 +5,10 @@
 
 The portable manifest plugin.json sits at the ZIP root, skills in skills/, images in assets/
 (https://developers.openai.com/plugins/deploy/submission). The Claude Code manifest is left out.
-Exits 1 and lists every problem when the package would be rejected.
+Exits 1 and lists every problem when the package would be rejected. With an mcp.json the package
+is a "With MCP" submission: the server must be a remote streamable-http HTTPS URL, and review needs
+exactly 5 positive and 3 negative test cases and the four listing URLs (a missing demo recording is
+only a warning, so a draft can be uploaded and scanned before the video exists).
 """
 import json
 import pathlib
@@ -72,11 +75,58 @@ for skill in skills:
     if not fields.get("name") or not fields.get("description"):
         problems.append(f"{skill.relative_to(SRC)}: YAML header needs name and description")
 
+warnings = []
+for agent in sorted((SRC / "skills").glob("*/agents/openai.yaml")):
+    text = agent.read_text()
+    rel = agent.relative_to(SRC)
+    if not re.search(r"^interface:\s*$", text, re.M) or not re.search(r"^\s+display_name:\s*\S", text, re.M) \
+            or not re.search(r"^\s+short_description:\s*\S", text, re.M):
+        problems.append(f"{rel}: interface needs display_name and short_description")
+    for prod in re.findall(r"^\s+-\s*(\S+)\s*$", text, re.M):
+        if prod not in ("CHAT", "CODEX"):
+            problems.append(f"{rel}: policy.products may only list CHAT and CODEX (got {prod})")
+
+mcp_path = SRC / "mcp.json"
+if mcp_path.is_file():
+    servers = json.loads(mcp_path.read_text()).get("mcpServers", {})
+    if len(servers) != 1:
+        problems.append(f"mcp.json: exactly one MCP server per plugin (got {len(servers)})")
+    for name, srv in servers.items():
+        if srv.get("type") != "streamable-http" or not str(srv.get("url", "")).startswith("https://"):
+            problems.append(f"mcp.json: {name} must be a remote streamable-http server on an https:// URL")
+        auth = srv.get("extensions", {}).get("com.openai", {}).get("auth", {}).get("type")
+        if auth not in ("none", "oauth", "mixed"):
+            problems.append(f"mcp.json: {name} needs extensions.com.openai.auth.type none, oauth or mixed (got {auth!r})")
+        if srv.get("headers"):
+            problems.append(f"mcp.json: {name}: public submission rejects server headers")
+    review = manifest.get("extensions", {}).get("com.openai", {}).get("review", {})
+    cases = review.get("test_cases", {})
+    pos, neg = cases.get("positive", []), cases.get("negative", [])
+    if len(pos) != 5 or len(neg) != 3:
+        problems.append(f"review.test_cases: exactly 5 positive and 3 negative (got {len(pos)} and {len(neg)})")
+    for i, c in enumerate(pos):
+        missing = [k for k in ("description", "prompt", "tools_triggered", "expected_behavior") if not c.get(k)]
+        if missing:
+            problems.append(f"review.test_cases.positive[{i}]: missing {', '.join(missing)}")
+    for i, c in enumerate(neg):
+        missing = [k for k in ("description", "prompt") if not c.get(k)]
+        if missing:
+            problems.append(f"review.test_cases.negative[{i}]: missing {', '.join(missing)}")
+    for key in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
+        if not ui.get(key):
+            problems.append(f"interface.{key}: required for MCP review")
+    if not review.get("demo_recording_url"):
+        warnings.append("review.demo_recording_url: needed before Submit for review")
+    if not manifest.get("extensions", {}).get("com.openai", {}).get("publication", {}).get("release_notes"):
+        problems.append("publication.release_notes: required")
+    if ui.get("screenshots"):
+        problems.append("interface.screenshots: only for MCP servers with custom UI")
+
 files = [p for p in sorted(SRC.rglob("*")) if p.is_file() and not (set(p.relative_to(SRC).parts) & LEAVE_OUT)]
 for p in files:
     rel = p.relative_to(SRC).as_posix()
-    if rel.endswith(".app.json") or rel.startswith("hooks/") or rel in ("hooks.json", "mcp.json", ".mcp.json"):
-        problems.append(f"{rel}: hooks, app references and MCP config cannot be in this package")
+    if rel.endswith(".app.json") or rel.startswith("hooks/") or rel in ("hooks.json", ".mcp.json"):
+        problems.append(f"{rel}: hooks, app references and Codex-format MCP config cannot be in this package")
 
 if problems:
     print("not ready:\n  " + "\n  ".join(problems))
@@ -88,3 +138,5 @@ with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
     for p in files:
         z.write(p, p.relative_to(SRC).as_posix())
 print(f"{out}  ({len(files)} files, {out.stat().st_size // 1024} KiB)")
+for w in warnings:
+    print(f"warning: {w}")

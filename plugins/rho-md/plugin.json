@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "rho-md",
-  "version": "0.1.0",
-  "description": "Use the Rho MD app on your computer from your AI tool: open Markdown documents to read them rendered, read and edit the open document, and search and organize your notes library.",
+  "version": "0.2.0",
+  "description": "Search and read the documents people publish on Rho Cloud (rho.md), with a link to each source; in Codex, also use the Rho MD app on your computer to open, write and organize Markdown notes.",
   "author": {
     "name": "Rho.md",
     "email": "support@rho.md",
@@ -23,11 +23,12 @@
     "com.openai": {
       "interface": {
         "displayName": "Rho MD",
-        "shortDescription": "Read and organize your notes",
-        "longDescription": "Rho MD is a Markdown reader and notebook for your desktop. With this plugin, Codex can use the copy of Rho MD on your computer: open a Markdown file or a report it just wrote so you can read it rendered, with math, diagrams and interactive charts; read and edit the document you have open; search, tag, move, rename and index the notes in your Rho MD library; and export to PDF or Word.\n\nIt needs Rho MD 1.4.15 or later, installed and running on the same computer (https://download.rho.md/cx), with Settings > AI tools switched on, which is the default. Rho MD 1.4.15 is available for Windows and Linux; the Mac version follows. Reading and editing run directly. Deleting, publishing, sending and uploading always ask you in Rho MD first, and Rho MD shows which AI tools have connected so you can remove one at any time. It does not work in cloud sandboxes, where the app is not available.",
+        "shortDescription": "Search published Markdown docs",
+        "longDescription": "Search the documents people publish on Rho Cloud (rho.md): books, notes, guides and research, in English, Chinese and other languages. Read any of them in full, with a link to the source on rho.md. Documents with interactive charts or exercises say so, and can be seen at their link or in the Rho MD app.\n\nIn Codex, the plugin also works with Rho MD, the Markdown reader and notebook on your computer: open a Markdown file or a report Codex just wrote so you can read it rendered, with math, diagrams and interactive charts; read and edit the open document; search, tag, move, rename and index the notes in your Rho MD library; and export to PDF or Word. This part needs Rho MD 1.4.15 or later, installed and running on the same computer (https://download.rho.md/cx), with Settings > AI tools switched on, which is the default. Rho MD 1.4.15 is available for Windows and Linux; the Mac version follows. Deleting, publishing, sending and uploading always ask you in Rho MD first.",
         "developerName": "Rho.md",
         "category": "Productivity",
         "capabilities": [
+          "Search",
           "Read",
           "Write"
         ],
@@ -36,13 +37,68 @@
         "privacyPolicyURL": "https://rho.md/legal/privacy",
         "termsOfServiceURL": "https://rho.md/legal/terms",
         "defaultPrompt": [
-          "Open the report you just wrote in Rho MD",
-          "Find my notes about pricing in Rho MD and tag them pricing",
-          "Make an index page for my Projects folder in Rho MD"
+          "Search Rho Cloud for an introduction to Stoicism",
+          "Find the Rho Cloud page on Guan Yu and tell me who he was",
+          "Open the report you just wrote in Rho MD"
         ],
         "brandColor": "#5A4CF5",
         "composerIcon": "./assets/icon.png",
         "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Search by topic",
+              "prompt": "Search Rho Cloud for documents about Stoicism.",
+              "tools_triggered": "search",
+              "expected_behavior": "Lists matching published documents (for example 'Stoicism — A Field Guide', 'The Enchiridion', 'Meditations') with their authors and rho.md links."
+            },
+            {
+              "description": "Read a document and summarize it",
+              "prompt": "Find Meditations by Marcus Aurelius on Rho Cloud and summarize its opening.",
+              "tools_triggered": "search, fetch",
+              "expected_behavior": "Finds 'Meditations', reads it with fetch, summarizes the opening book and cites https://rho.md/p/meditations-aurelius."
+            },
+            {
+              "description": "Search in Chinese",
+              "prompt": "在 Rho Cloud 上查一下关羽是谁。",
+              "tools_triggered": "search, fetch",
+              "expected_behavior": "Finds the 關羽 page from the Romance of the Three Kingdoms wiki (simplified and traditional characters match), answers from it and links the rho.md page."
+            },
+            {
+              "description": "Long document in parts",
+              "prompt": "Read the first chapter of Pride and Prejudice from Rho Cloud.",
+              "tools_triggered": "search, fetch",
+              "expected_behavior": "Fetches the book; the text arrives in parts and names the next part's id; quotes or summarizes the first chapter and links the source."
+            },
+            {
+              "description": "No matching documents",
+              "prompt": "Search Rho Cloud for documents about quantum gravity in 18th-century Peru.",
+              "tools_triggered": "search",
+              "expected_behavior": "Reports that Rho Cloud has no matching published documents, without inventing any."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Deleting is not supported",
+              "prompt": "Delete the Stoicism document from Rho Cloud."
+            },
+            {
+              "description": "Publishing is not supported in ChatGPT",
+              "prompt": "Publish this essay to my Rho Cloud account."
+            },
+            {
+              "description": "Unrelated request",
+              "prompt": "What's the weather in Sydney today?"
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments."
+      },
+      "publication": {
+        "release_notes": "Search and read documents published on Rho Cloud, with links to the sources. In Codex, also open, write and organize notes in the Rho MD app."
       }
     }
   }

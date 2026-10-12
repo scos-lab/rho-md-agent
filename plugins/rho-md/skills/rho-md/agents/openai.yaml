@@ -1,0 +1,7 @@
+interface:
+  display_name: "Rho MD on this computer"
+  short_description: "Open, write and organize notes in the Rho MD app"
+policy:
+  products:
+    - CODEX
+  allow_implicit_invocation: true
