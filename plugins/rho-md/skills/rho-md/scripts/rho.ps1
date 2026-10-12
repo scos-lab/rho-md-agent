@@ -15,8 +15,6 @@ if (-not $client) {
 }
 $client = ($client.ToLower() -replace '[^a-z0-9]+', '-').Trim('-')
 $label = switch ($client) { 'codex' { 'Codex' } 'claude-code' { 'Claude Code' } default { $client } }
-# Short links tell us which AI tool's users came to download Rho MD (a count of clicks per link, nothing else).
-$download = switch ($client) { 'codex' { 'https://download.rho.md/cx' } 'claude-code' { 'https://download.rho.md/cc' } default { 'https://rho.md/download' } }
 
 function Find-Discovery {
   $dirs = @()
@@ -33,7 +31,7 @@ function Find-Discovery {
 
 function Not-Running {
   [Console]::Error.WriteLine("Rho MD is not running, or 'Allow AI tools to use Rho MD' is off in its Settings > AI tools.")
-  [Console]::Error.WriteLine("Start it with: powershell -File `"$PSCommandPath`" --launch   (not installed? $download)")
+  [Console]::Error.WriteLine("Start it with: powershell -File `"$PSCommandPath`" --launch. If Rho MD is not installed, it has to be installed first (the skill gives the link).")
   exit 2
 }
 
@@ -64,7 +62,7 @@ if ($rest.Count -gt 0 -and $rest[0] -eq '--launch') {
       try { $s = Open-Session $now $null; if ($s[0]) { Write-Output 'ok Rho MD is running'; exit 0 } } catch {}
     }
   }
-  [Console]::Error.WriteLine('Rho MD did not start within 20 seconds. If it is not installed: ' + $download)
+  [Console]::Error.WriteLine('Rho MD did not start within 20 seconds. If Rho MD is not installed, it has to be installed first (the skill gives the link).')
   exit 2
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "rho-md",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Search and read the documents people publish on Rho Cloud (rho.md), with links to the sources; and use the Rho MD app on your computer to open Markdown documents rendered, read and edit the open document, and search and organize your notes library.",
   "author": {
     "name": "Rho.md",
@@ -8,6 +8,7 @@
     "url": "https://rho.md"
   },
   "homepage": "https://rho.md",
+  "privacyPolicyUrl": "https://rho.md/legal/privacy",
   "license": "MIT",
   "keywords": [
     "markdown",

@@ -19,8 +19,6 @@ if [ -z "$client" ]; then
 fi
 client=$(printf '%s' "$client" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9-' '-' | sed 's/^-*//; s/-*$//')
 case "$client" in codex) label=Codex ;; claude-code) label="Claude Code" ;; *) label=$client ;; esac
-# Short links tell us which AI tool's users came to download Rho MD (a count of clicks per link, nothing else).
-case "$client" in codex) download=https://download.rho.md/cx ;; claude-code) download=https://download.rho.md/cc ;; *) download=https://rho.md/download ;; esac
 
 discover() {
   local dirs=() f newest=""
@@ -44,7 +42,7 @@ discover() {
 
 not_running() {
   echo "Rho MD is not running, or \"Allow AI tools to use Rho MD\" is off in its Settings › AI tools." >&2
-  echo "Start it with: bash \"$0\" --launch   (not installed? $download)" >&2
+  echo "Start it with: bash \"$0\" --launch. If Rho MD is not installed, it has to be installed first (the skill gives the link)." >&2
   exit 2
 }
 
@@ -56,7 +54,7 @@ if [ "${rest[0]:-}" = --launch ]; then
     if discover && [ "$token" != "$before" ]; then echo "ok Rho MD is ready"; exit 0; fi
     if [ -n "$before" ] && discover && (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then echo "ok Rho MD is running"; exit 0; fi
   done
-  echo "Rho MD did not start within 20 seconds. If it is not installed: $download" >&2
+  echo "Rho MD did not start within 20 seconds. If Rho MD is not installed, it has to be installed first (the skill gives the link)." >&2
   exit 2
 fi
 

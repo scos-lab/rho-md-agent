@@ -18,6 +18,11 @@ Two things in one plugin:
   Rho MD" switched on (the default). Rho MD 1.4.15 is available for Windows and Linux; the Mac
   version follows. This part does not work in cloud sandboxes, where the app is not available.
 
+## Install
+
+- **Claude Code:** `/plugin install rho-md --marketplace scos-lab/rho-md-agent`
+- **Codex:** `codex plugin marketplace add scos-lab/rho-md-agent`, then `codex plugin add rho-md@rho-md`
+
 ## What it runs, reads and connects to
 
 - **Rho Cloud search** connects to `https://rho.md/api/mcp` (an MCP server run by Rho MD). It sends
@@ -33,8 +38,8 @@ Two things in one plugin:
   from your library is sent over the internet.
 - It **opens** the `rho://` link when asked to start Rho MD (`--launch`), the same way your system
   opens any app link.
-- When Rho MD is not installed, the scripts print a download link (download.rho.md, which leads to
-  the download page). They never open or fetch it themselves.
+- The scripts contain no web addresses at all. When Rho MD is not installed, the skill has the AI
+  give you a download link (download.rho.md, which leads to the download page).
 
 ## What it can do, and what it asks first
 

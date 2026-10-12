@@ -17,9 +17,6 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 
 const ID = 'md.rho.app';
-// Short links tell us which AI tool's users came to download Rho MD (a count of clicks per link, nothing else).
-const DOWNLOADS = { codex: 'https://download.rho.md/cx', 'claude-code': 'https://download.rho.md/cc' };
-let DOWNLOAD = 'https://rho.md/download';
 const LABELS = { codex: 'Codex', 'claude-code': 'Claude Code' };
 
 function usage(msg) {
@@ -83,7 +80,7 @@ function guessClient() {
 
 const notRunning = () =>
   `Rho MD is not running, or "Allow AI tools to use Rho MD" is off in its Settings › AI tools.\n` +
-  `Start it with: node "${process.argv[1]}" --launch   (not installed? ${DOWNLOAD})`;
+  `Start it with: node "${process.argv[1]}" --launch. If Rho MD is not installed, it has to be installed first (the skill gives the link).`;
 
 /** One session: hello, then (optionally) one command. Resolves with the reply lines. */
 function session(info, client, line, onWait) {
@@ -157,7 +154,7 @@ async function launch() {
       } catch {}
     }
   }
-  console.error(`Rho MD did not start within 20 seconds. If it is not installed: ${DOWNLOAD}`);
+  console.error(`Rho MD did not start within 20 seconds. If Rho MD is not installed, it has to be installed first (the skill gives the link).`);
   return 2;
 }
 
@@ -170,7 +167,6 @@ async function main() {
     else rest.push(argv[i]);
   }
   client = (client || guessClient()).toLowerCase();
-  DOWNLOAD = DOWNLOADS[client] || DOWNLOAD;
   if (rest[0] === '--launch') return launch();
   const status = rest[0] === '--status';
   const cmd = status ? null : rest[0];
