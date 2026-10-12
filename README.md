@@ -34,8 +34,10 @@ Then ask, for example: "Open the report you just wrote in Rho MD".
 ## What it can do, and what it asks first
 
 The plugin's skill runs Rho MD commands through a small client script (`node`, with `bash` and
-PowerShell fallbacks) that talks to the app over a local connection on 127.0.0.1. Nothing goes
-over the internet.
+PowerShell fallbacks) that reads Rho MD's `agent-connect.json` (the local port and a key that changes
+every time the app starts) and talks to the app over a local connection on 127.0.0.1. Nothing goes
+over the internet. Asked to start Rho MD, it opens the `rho://` link. The plugin's own
+[README](plugins/rho-md/README.md) lists everything it runs, reads and connects to.
 
 - Reading and editing run directly.
 - Deleting, publishing, sending and uploading always ask you in Rho MD first.
