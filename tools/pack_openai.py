@@ -41,9 +41,12 @@ for key, limit in (("displayName", 30), ("shortDescription", 30), ("longDescript
     value = ui.get(key, "")
     if not value or len(value) > limit:
         problems.append(f"interface.{key}: {len(value)} characters (1–{limit})")
-for key in ("developerName", "category"):
+for key in ("developerName", "category", "supportURL", "privacyPolicyURL"):
     if not ui.get(key):
         problems.append(f"interface.{key}: missing")
+for key in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
+    if ui.get(key) and not ui[key].startswith("https://"):
+        problems.append(f"interface.{key}: must be an https:// URL")
 if not isinstance(ui.get("capabilities"), list):
     problems.append("interface.capabilities: must be a list")
 if len(ui.get("defaultPrompt", [])) > 3:
