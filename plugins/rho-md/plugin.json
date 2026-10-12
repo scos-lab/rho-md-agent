@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Use the Rho MD app on your computer from your AI tool: open Markdown documents to read them rendered, read and edit the open document, and search and organize your notes library.",
   "author": {
-    "name": "Rho MD",
+    "name": "Rho.md",
     "email": "support@rho.md",
     "url": "https://rho.md"
   },
@@ -25,7 +25,7 @@
         "displayName": "Rho MD",
         "shortDescription": "Read and organize your notes",
         "longDescription": "Rho MD is a Markdown reader and notebook for your desktop. With this plugin, Codex can use the copy of Rho MD on your computer: open a Markdown file or a report it just wrote so you can read it rendered, with math, diagrams and interactive charts; read and edit the document you have open; search, tag, move, rename and index the notes in your Rho MD library; and export to PDF or Word.\n\nIt needs Rho MD 1.4.15 or later, installed and running on the same computer (https://download.rho.md/cx), with Settings > AI tools switched on, which is the default. Rho MD 1.4.15 is available for Windows and Linux; the Mac version follows. Reading and editing run directly. Deleting, publishing, sending and uploading always ask you in Rho MD first, and Rho MD shows which AI tools have connected so you can remove one at any time. It does not work in cloud sandboxes, where the app is not available.",
-        "developerName": "Rho MD",
+        "developerName": "Rho.md",
         "category": "Productivity",
         "capabilities": [
           "Read",
