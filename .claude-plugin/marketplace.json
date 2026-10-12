@@ -1,5 +1,6 @@
 {
   "name": "rho-md",
+  "description": "Rho MD, the Markdown reader and notebook, for Claude Code.",
   "owner": {
     "name": "Rho MD",
     "email": "support@rho.md"
